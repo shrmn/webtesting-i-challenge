@@ -20,21 +20,19 @@ function succeed(item) {
 }
 
 function fail(item) {
-  return {
-    ...item,
-    enhancement:
-      item.enhancement > 16
-        ? item.enhancement - 1
-        : item.enhancement >= 15
-        ? item.durability - 10
-        : item.durability - 5
-  };
+  return item.enhancement > 16
+    ? {
+        ...item,
+        enhancement: item.enhancement - 1,
+        durability: item.durability - 10
+      }
+    : item.enhancement >= 15
+    ? { ...item, durability: item.durability - 10 }
+    : { ...item, durability: item.durability - 5 };
 }
 
 function get(item) {
-  return {
-    ...item,
-    name:
-      item.enhancement > 0 ? `[+${item.enhancement}] ${item.name}` : item.name
-  };
+  return item.enhancement === 0
+    ? { ...item }
+    : { ...item, name: `[+${item.enhancement}] ${item.name}` };
 }

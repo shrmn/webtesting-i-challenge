@@ -108,6 +108,84 @@ describe("enhancer.js", () => {
       });
     });
 
-    describe("fail(item)", () => {});
+    describe("fail(item)", () => {
+      it("given an enhancement of 0, returns an item with durability decreased by 5", () => {
+        const item = {
+          name: "Mjolnir",
+          durability: 100,
+          enhancement: 0
+        };
+        expect(enhancer.fail(item).durability).toEqual(item.durability - 5);
+      });
+
+      it("given an enhancement of 14, returns an item with durability decreased by 5", () => {
+        const item = {
+          name: "Mjolnir",
+          durability: 0,
+          enhancement: 14
+        };
+        expect(enhancer.fail(item).durability).toEqual(item.durability - 5);
+      });
+
+      it("given enhancement 15, returns item with durability -10", () => {
+        const item = {
+          name: "Mjolnir",
+          durability: 0,
+          enhancement: 15
+        };
+        expect(enhancer.fail(item).durability).toEqual(item.durability - 10);
+      });
+
+      it("given an enhancement of 16, returns an item with durability -10 & enhancement -1", () => {
+        const item = {
+          name: "Mjolnir",
+          durability: 0,
+          enhancement: 16
+        };
+        expect(enhancer.fail(item).durability).toEqual(item.durability - 10);
+        expect(enhancer.fail(item).enhancement).toEqual(item.enhancement);
+      });
+
+      it("given enhancement > 16, returns item with -1 enhancement, -10 durability", () => {
+        const item = {
+          name: "Mjolnir",
+          durability: 0,
+          enhancement: 17
+        };
+        expect(enhancer.fail(item).durability).toEqual(item.durability - 10);
+        expect(enhancer.fail(item).enhancement).toEqual(item.enhancement - 1);
+      });
+    });
+
+    describe("enhancer(get)", () => {
+      it("should get an item", () => {
+        const item = {
+          name: "Mjolnir",
+          durability: 0,
+          enhancement: 0
+        };
+        expect(enhancer.get(item)).toEqual(item);
+      });
+
+      it("should get an item with an unmodified name", () => {
+        const item = {
+          name: "Mjolnir",
+          durability: 0,
+          enhancement: 0
+        };
+        expect(enhancer.get(item).name).toEqual(item.name);
+      });
+
+      it("should get an item with a new name ", () => {
+        const item = {
+          name: "Mjolnir",
+          durability: 0,
+          enhancement: 15
+        };
+        expect(enhancer.get(item).name).toEqual(
+          `[+${item.enhancement}] ${item.name}`
+        );
+      });
+    });
   });
 });
